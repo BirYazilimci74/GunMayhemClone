@@ -39,7 +39,7 @@ public class InputHandler : MonoBehaviour
 
     private void DownHandler(InputAction.CallbackContext obj)
     {
-        if (obj.ReadValueAsButton() && oneWayPlatform.oneWayPlatformGameObject != null)
+        if (obj.ReadValueAsButton() && oneWayPlatform.oneWayPlatformGameObject != null && GameManager.Instance.canPlay)
         {
             StartCoroutine(oneWayPlatform.DisableCollision());
         }
@@ -53,7 +53,7 @@ public class InputHandler : MonoBehaviour
 
     private void JumpHandler(InputAction.CallbackContext context)
     {
-        if (context.ReadValueAsButton())
+        if (context.ReadValueAsButton() && GameManager.Instance.canPlay)
         {
             PlayerController.Instance.Jump();
         }

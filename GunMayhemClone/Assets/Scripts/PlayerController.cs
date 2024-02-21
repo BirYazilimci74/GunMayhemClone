@@ -4,8 +4,12 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpAmount;
+    [SerializeField] private HealthBar healthBar;
 
+    private float bottomBorderY = -15f;
     private InputHandler inputHandler;
+    private float maxHealth = 100;
+    public float currentHealth;
     private Rigidbody2D playerRb;
     private Vector3 scale;
     private bool canJump;
@@ -21,10 +25,18 @@ public class PlayerController : MonoBehaviour
         inputHandler = FindObjectOfType<InputHandler>();
         playerRb = GetComponent<Rigidbody2D>();
     }
-    
+
+    private void Start()
+    {
+        healthBar.SetMaxHealth(maxHealth);
+        currentHealth = maxHealth;
+    }
+
     void Update()
     {
+        if (!GameManager.Instance.canPlay){return;}
         Movement();
+        EndingGame();
     }
 
     private void Movement()
@@ -44,6 +56,20 @@ public class PlayerController : MonoBehaviour
         {
             playerRb.AddForce(Vector2.up * jumpAmount,ForceMode2D.Impulse);
         }
+    }
+
+    private void EndingGame()
+    {
+        if (transform.position.y < bottomBorderY || currentHealth <= 0)
+        {
+            GameManager.Instance.EndingGame();
+        }
+    }
+
+    public void GetDamage(float damage)
+    {
+        currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
     }
 
     private void OnCollisionStay2D(Collision2D other)

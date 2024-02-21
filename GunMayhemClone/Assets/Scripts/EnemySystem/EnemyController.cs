@@ -12,6 +12,7 @@ public class EnemyController : MonoBehaviour
     private GameObject oneWayPlatformGameObject;
     private BoxCollider2D enemyCollider2D;
     private EnemyRayCheck enemyRayCheck;
+    private float bottomBorderY = -15;
     private Transform playerTranform;
     private Rigidbody2D enemyRb;
     private Vector3 scale;
@@ -35,7 +36,9 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
+        if (!GameManager.Instance.canPlay){return;}
         Movement();
+        EndingGame();
     }
 
     private void Movement()
@@ -76,6 +79,15 @@ public class EnemyController : MonoBehaviour
         }
         
     }
+
+    private void EndingGame()
+    {
+        if (transform.position.y < bottomBorderY)
+        {
+            GameManager.Instance.EndingGame();
+        }
+    }
+    
     private void Jump()
     {
         if (canJump && enemyRayCheck.CanUp())
