@@ -14,10 +14,23 @@ public class InputHandler : MonoBehaviour
         bulletSystem = FindObjectOfType<BulletSystem>();
         playerInput = new PlayerInput();
         
+        
+    }
+
+    private void OnEnable()
+    {
         playerInput.Player.Enable();
         playerInput.Player.Jump.performed += JumpHandler;
         playerInput.Player.Down.performed += DownHandler;
         playerInput.Player.Shoot.performed += ShootHandler;
+    }
+
+    private void OnDisable()
+    {
+        playerInput.Player.Disable();
+        playerInput.Player.Jump.performed -= JumpHandler;
+        playerInput.Player.Down.performed -= DownHandler;
+        playerInput.Player.Shoot.performed -= ShootHandler;
     }
 
     private void ShootHandler(InputAction.CallbackContext obj)
